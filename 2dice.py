@@ -37,7 +37,7 @@ def convert_dice(image):
 	width, height = image.size
 
 	# Create new Image and a Pixel Map
-	new = Image.new("RGB", (width*7, height*7), "white")
+	new = Image.new("RGB", (width*7, height*7), "black")
 	pixels = new.load()
 
 	i = 0
@@ -70,21 +70,21 @@ def convert_dice(image):
 					pixels[(i*7)+l, (j*7)+k] = (255,255,255)
 
 			# Transform to dice
-			if saturation > maxSaturation*(5/6):
+			if saturation > maxSaturation*(5.5/6):
 				pixels[(i*7)+3, (j*7)+3] = (0,0,0)
-			elif saturation > maxSaturation*(2/3):
+			elif saturation > maxSaturation*(5.5/6):
 				pixels[(i*7)+1, (j*7)+2] = (0,0,0)
 				pixels[(i*7)+5, (j*7)+4] = (0,0,0)
-			elif saturation > maxSaturation*(1/2):
+			elif saturation > maxSaturation*(4.5/6):
 				pixels[(i*7)+1, (j*7)+1] = (0,0,0)
 				pixels[(i*7)+3, (j*7)+3] = (0,0,0)
 				pixels[(i*7)+5, (j*7)+5] = (0,0,0)
-			elif saturation > maxSaturation*(1/3):
+			elif saturation > maxSaturation*(3.5/6):
 				pixels[(i*7)+2, (j*7)+2] = (0,0,0)
 				pixels[(i*7)+2, (j*7)+4] = (0,0,0)
 				pixels[(i*7)+4, (j*7)+2] = (0,0,0)
 				pixels[(i*7)+4, (j*7)+4] = (0,0,0)
-			elif saturation > maxSaturation*(1/6):
+			elif saturation > maxSaturation*(2.5/6):
 				pixels[(i*7)+1, (j*7)+1] = (0,0,0)
 				pixels[(i*7)+5, (j*7)+1] = (0,0,0)
 				pixels[(i*7)+3, (j*7)+3] = (0,0,0)
@@ -106,41 +106,25 @@ def convert_dice(image):
 
 def main():
 	# process input
-	input = sys.argv[1].strip()
-	delimiter = ""
-
-	if "/" in input:
-		delimiter = "/"
-	elif "\\" in input:
-		delimiter = "\\"
-
-	input = input.split(delimiter)
-	file = input[-1]
-	path = ""
-
-	if len(input) != 1:
-		path = delimiter
-
-	for i in range(len(input)-1):
-		path += input[i] + delimiter
+	path = "/Users/dvcv/Documents/code/2dice/djs.png"
 
 	try:
 		# Load Image (JPEG/JPG needs libjpeg to load)
-		original = Image.open(path + file)
+		original = Image.open(path)
 
 	except FileNotFoundError:
-		print(path + file)
+		print(path)
 		print("File not found. Please make sure your path and file name are correct and try again.")
 
 	else:
-		suffix = "." + file.split(".")[-1]
+		suffix = "." + 'png'
 
 		# Convert to Grayscale and save
 		new = convert_grayscale(original)
 		new.save(path + 'gray' + suffix)
 
 		# Load gray image
-		gray = Image.open(path + 'gray' + suffix)
+		gray = Image.open('/Users/dvcv/Documents/code/2dice/djs.pnggray.png')
 
 		# Convert to dice and save
 		new = convert_dice(gray)
