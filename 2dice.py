@@ -30,78 +30,74 @@ def convert_grayscale(image):
 	# Return new image
 	return new
 
+def get_pixel(image, i, j):
+ 	# Inside image bounds?
+ 	width, height = image.size
+ 	if i >= width or j >= height:
+ 		return None
+
+  	# Get Pixel
+ 	pixel = image.getpixel((i, j))
+ 	return pixel
+
 # Create a Primary Colors version of the image
 def convert_dice(image):
 
 	# Get size
 	width, height = image.size
-
 	# Create new Image and a Pixel Map
-	new = Image.new("RGB", (width*7, height*7), "black")
+	new = Image.new("RGB", (width, height), "black")
 	pixels = new.load()
-
-	i = 0
-	j = 0
-	maxSaturation = 0
-	count = 0
-
-	while i < height:
-		while j < width:
-			pixel = image.getpixel((i,j))
-			if pixel[2] > maxSaturation:
-				maxSaturation = pixel[2]
-			count += 1
-			j+=1
-		i+=1
-
-	i = 0
-	j = 0
-
 	# Transform to dice
-	while j < height:
-		while i < width:
-			# Get saturation
-			saturation = 0
-			pixel = image.getpixel((i,j))
-			saturation += pixel[2]
+ 	i = 0
+ 	j = 0
+	while j < height - 20:
+	 while i < width - 20:
+	  # Get saturation
+	  saturation = 0
+	  for k in range(7):
+	   for l in range(7):
+		pixel = get_pixel(image, i+l, j+k)
+		if pixel == None:
+			continue
+		saturation += pixel[2]
+		saturation = saturation/49 # calculate average
+	  for k in range(7):
+	   for l in range(7):
+	    pixels[i+l, j+k] = (0,0,0)
+	  # draw die
+	  if saturation < 1:
+	    pixels[i+3, j+3] = (255,255,255)
+	  elif saturation < 2:
+	   pixels[i+1, j+2] = (255,255,255)
+	   pixels[i+5, j+4] = (255,255,255)
+	  elif saturation < 3:
+	   pixels[i+1, j+1] = (255,255,255)
+	   pixels[i+3, j+3] = (255,255,255)
+	   pixels[i+5, j+5] = (255,255,255)
+	  elif saturation < 4:
+	   pixels[i+2, j+2] = (255,255,255)
+	   pixels[i+2, j+4] = (255,255,255)
+	   pixels[i+4, j+2] = (255,255,255)
+	   pixels[i+4, j+4] = (255,255,255)
+	  elif saturation < 5:
+	   pixels[i+1, j+1] = (255,255,255)
+	   pixels[i+5, j+1] = (255,255,255)
+	   pixels[i+3, j+3] = (255,255,255)
+	   pixels[i+1, j+5] = (255,255,255)
+	   pixels[i+5, j+5] = (255,255,255)
+	  else:
+	   pixels[i+2, j+1] = (255,255,255)
+	   pixels[i+4, j+1] = (255,255,255)
+	   pixels[i+2, j+3] = (255,255,255)
+	   pixels[i+4, j+3] = (255,255,255)
+	   pixels[i+2, j+5] = (255,255,255)
+	   pixels[i+4, j+5] = (255,255,255)
+	  i+=7
+	 i=0
+	 j+=7
 
-			for k in range(7):
-				for l in range(7):
-					pixels[(i*7)+l, (j*7)+k] = (255,255,255)
-
-			# Transform to dice
-			if saturation > maxSaturation*(5.5/6):
-				pixels[(i*7)+3, (j*7)+3] = (0,0,0)
-			elif saturation > maxSaturation*(5.5/6):
-				pixels[(i*7)+1, (j*7)+2] = (0,0,0)
-				pixels[(i*7)+5, (j*7)+4] = (0,0,0)
-			elif saturation > maxSaturation*(4.5/6):
-				pixels[(i*7)+1, (j*7)+1] = (0,0,0)
-				pixels[(i*7)+3, (j*7)+3] = (0,0,0)
-				pixels[(i*7)+5, (j*7)+5] = (0,0,0)
-			elif saturation > maxSaturation*(3.5/6):
-				pixels[(i*7)+2, (j*7)+2] = (0,0,0)
-				pixels[(i*7)+2, (j*7)+4] = (0,0,0)
-				pixels[(i*7)+4, (j*7)+2] = (0,0,0)
-				pixels[(i*7)+4, (j*7)+4] = (0,0,0)
-			elif saturation > maxSaturation*(2.5/6):
-				pixels[(i*7)+1, (j*7)+1] = (0,0,0)
-				pixels[(i*7)+5, (j*7)+1] = (0,0,0)
-				pixels[(i*7)+3, (j*7)+3] = (0,0,0)
-				pixels[(i*7)+1, (j*7)+5] = (0,0,0)
-				pixels[(i*7)+5, (j*7)+5] = (0,0,0)
-			else:
-				pixels[(i*7)+2, (j*7)+1] = (0,0,0)
-				pixels[(i*7)+4, (j*7)+1] = (0,0,0)
-				pixels[(i*7)+2, (j*7)+3] = (0,0,0)
-				pixels[(i*7)+4, (j*7)+3] = (0,0,0)
-				pixels[(i*7)+2, (j*7)+5] = (0,0,0)
-				pixels[(i*7)+4, (j*7)+5] = (0,0,0)
-			i+=1
-		i=0
-		j+=1
-
-	# Return new image
+    # return new image
 	return new
 
 def main():
