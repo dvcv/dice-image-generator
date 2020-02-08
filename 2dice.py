@@ -58,29 +58,29 @@ def convert_dice(image):
 	  for k in range(7):
 	   for l in range(7):
 		pixel = get_pixel(image, i+l, j+k)
-		if pixel == None:
-			continue
+
 		saturation += pixel[2]
-		saturation = saturation/49 # calculate average
-	  for k in range(7):
-	   for l in range(7):
-	    pixels[i+l, j+k] = (0,0,0)
+	  saturation = saturation/49 # calculate average
+	  print(saturation)
+	  # for k in range(7):
+	  #  for l in range(7):
+	  #   pixels[i+l, j+k] = (0,0,0)
 	  # draw die
-	  if saturation < 1:
+	  if saturation < 10:
 	    pixels[i+3, j+3] = (255,255,255)
-	  elif saturation < 2:
+	  elif saturation < 20:
 	   pixels[i+1, j+2] = (255,255,255)
 	   pixels[i+5, j+4] = (255,255,255)
-	  elif saturation < 3:
+	  elif saturation < 60:
 	   pixels[i+1, j+1] = (255,255,255)
 	   pixels[i+3, j+3] = (255,255,255)
 	   pixels[i+5, j+5] = (255,255,255)
-	  elif saturation < 4:
+	  elif saturation < 100:
 	   pixels[i+2, j+2] = (255,255,255)
 	   pixels[i+2, j+4] = (255,255,255)
 	   pixels[i+4, j+2] = (255,255,255)
 	   pixels[i+4, j+4] = (255,255,255)
-	  elif saturation < 5:
+	  elif saturation < 150:
 	   pixels[i+1, j+1] = (255,255,255)
 	   pixels[i+5, j+1] = (255,255,255)
 	   pixels[i+3, j+3] = (255,255,255)
@@ -123,8 +123,8 @@ def main():
 		gray = Image.open('/Users/dvcv/Documents/code/2dice/djs.pnggray.png')
 		width, height = gray.size
 		dice_amount = 1000
-		width_dice_amount = 140
-		height_dice_amount = 150
+		width_dice_amount = 10
+		height_dice_amount = 10
 		print('width_dice_amount:{0}'.format(width_dice_amount))
 		print('height_dice_amount:{0}'.format(height_dice_amount))
 		new_image = gray.resize((width_dice_amount*7, height_dice_amount*7))
