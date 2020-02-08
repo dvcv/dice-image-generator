@@ -51,8 +51,8 @@ def convert_dice(image):
 	# Transform to dice
  	i = 0
  	j = 0
-	while j < height - 20:
-	 while i < width - 20:
+	while j < height - 0:
+	 while i < width - 0:
 	  # Get saturation
 	  saturation = 0
 	  for k in range(7):
@@ -121,9 +121,17 @@ def main():
 
 		# Load gray image
 		gray = Image.open('/Users/dvcv/Documents/code/2dice/djs.pnggray.png')
+		width, height = gray.size
+		dice_amount = 1000
+		width_dice_amount = 140
+		height_dice_amount = 150
+		print('width_dice_amount:{0}'.format(width_dice_amount))
+		print('height_dice_amount:{0}'.format(height_dice_amount))
+		new_image = gray.resize((width_dice_amount*7, height_dice_amount*7))
+		new_image.save
 
 		# Convert to dice and save
-		new = convert_dice(gray)
+		new = convert_dice(new_image)
 		new.save(path + 'dice' + suffix)
 
 if __name__ == "__main__":
