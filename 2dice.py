@@ -31,7 +31,7 @@ def convert_grayscale(image):
 	return new
 
 # Resize Image
-def resize(image, dice = 1000):
+def resize(image, dice = 1000, with_border=False):
 	# Get size
 	width, height = image.size
 
@@ -50,7 +50,11 @@ def resize(image, dice = 1000):
 	print('height_dice_amount:{0}'.format(new_height))
 	print('width_dice_amount*height_dice_amount:{0}'.format(new_width*new_height))
 
-	return image.resize((new_width*7, new_height*7))
+	adjust = 7
+	if with_border == True:
+	 adjust = 9
+
+	return image.resize((new_width*adjust, new_height*adjust))
 
 def get_pixel(image, i, j):
  	# Inside image bounds?
@@ -63,7 +67,7 @@ def get_pixel(image, i, j):
  	return pixel
 
 # Create a Primary Colors version of the image
-def convert_dice(image):
+def convert_dice(image, saturation_thresholds):
 
 	# Get size
 	width, height = image.size
@@ -87,21 +91,26 @@ def convert_dice(image):
 	  #  for l in range(7):
 	  #   pixels[i+l, j+k] = (0,0,0)
 	  # draw die
-	  if saturation < 15:
+	  one_dice_sat = saturation_thresholds['one_dice_sat']
+	  two_dice_sat = saturation_thresholds['two_dice_sat']
+	  three_dice_sat = saturation_thresholds['three_dice_sat']
+	  four_dice_sat = saturation_thresholds['four_dice_sat']
+	  five_dice_sat = saturation_thresholds['five_dice_sat']
+	  if saturation < one_dice_sat:
 	    pixels[i+3, j+3] = (255,255,255)
-	  elif saturation < 55:
+	  elif saturation < two_dice_sat:
 	   pixels[i+1, j+2] = (255,255,255)
 	   pixels[i+5, j+4] = (255,255,255)
-	  elif saturation < 85:
+	  elif saturation < three_dice_sat:
 	   pixels[i+1, j+1] = (255,255,255)
 	   pixels[i+3, j+3] = (255,255,255)
 	   pixels[i+5, j+5] = (255,255,255)
-	  elif saturation < 100:
+	  elif saturation < four_dice_sat:
 	   pixels[i+2, j+2] = (255,255,255)
 	   pixels[i+2, j+4] = (255,255,255)
 	   pixels[i+4, j+2] = (255,255,255)
 	   pixels[i+4, j+4] = (255,255,255)
-	  elif saturation < 115:
+	  elif saturation < five_dice_sat:
 	   pixels[i+1, j+1] = (255,255,255)
 	   pixels[i+5, j+1] = (255,255,255)
 	   pixels[i+3, j+3] = (255,255,255)
@@ -117,6 +126,79 @@ def convert_dice(image):
 	  i+=7
 	 i=0
 	 j+=7
+
+    # return new image
+	return new
+
+# Create a Primary Colors version of the image
+def convert_dice_with_border(image, saturation_thresholds, border_color = (255, 255, 102)):
+
+	# Get size
+	width, height = image.size
+
+	# Create new Image and a Pixel Map
+	new = Image.new("RGB", (width, height), "black")
+	pixels = new.load()
+	# Transform to dice
+ 	i = 0
+ 	j = 0
+	while j < height - 0:
+	 while i < width - 0:
+	  # Get saturation
+	  saturation = 0
+	  for k in range(9):
+	   for l in range(9):
+		if k%9 ==0 or l%9 ==0:
+		 pixels[i+k,j+l] = border_color
+		pixel = get_pixel(image, i+l, j+k)
+
+		saturation += pixel[2]
+	  saturation = saturation/81 # calculate average
+
+	  one_dice_sat = saturation_thresholds['one_dice_sat']
+	  two_dice_sat = saturation_thresholds['two_dice_sat']
+	  three_dice_sat = saturation_thresholds['three_dice_sat']
+	  four_dice_sat = saturation_thresholds['four_dice_sat']
+	  five_dice_sat = saturation_thresholds['five_dice_sat']
+
+  	  for k in range(9):
+  	   for l in range(9):
+		# if k % 9 != 0 and l % 9 != 0:
+  	    if k % 9 != 0 or l % 9 != 0:
+
+  	     pixels[i, j] = (0,0,0)
+
+
+	  if saturation < one_dice_sat:
+	    pixels[i+1+3, j+1+3] = (255,255,255)
+	  elif saturation < two_dice_sat:
+	   pixels[i+1+1, j+1+2] = (255,255,255)
+	   pixels[i+1+5, j+1+4] = (255,255,255)
+	  elif saturation < three_dice_sat:
+	   pixels[i+1+1, j+1+1] = (255,255,255)
+	   pixels[i+1+3, j+1+3] = (255,255,255)
+	   pixels[i+1+5, j+1+5] = (255,255,255)
+	  elif saturation < four_dice_sat:
+	   pixels[i+1+2, j+1+2] = (255,255,255)
+	   pixels[i+1+2, j+1+4] = (255,255,255)
+	   pixels[i+1+4, j+1+2] = (255,255,255)
+	   pixels[i+1+4, j+1+4] = (255,255,255)
+	  elif saturation < five_dice_sat:
+	   pixels[i+1+1, j+1+1] = (255,255,255)
+	   pixels[i+1+5, j+1+1] = (255,255,255)
+	   pixels[i+1+3, j+1+3] = (255,255,255)
+	   pixels[i+1+1, j+1+5] = (255,255,255)
+	   pixels[i+1+5, j+1+5] = (255,255,255)
+	  else:
+	   pixels[i+1+2, j+1+1] = (255,255,255)
+	   pixels[i+1+4, j+1+1] = (255,255,255)
+	   pixels[i+1+2, j+1+3] = (255,255,255)
+	   pixels[i+1+4, j+1+3] = (255,255,255)
+	   pixels[i+1+2, j+1+5] = (255,255,255)
+	   pixels[i+1+4, j+1+5] = (255,255,255)
+	  i+=9
+	 i=0
+	 j+=9
 
     # return new image
 	return new
@@ -145,11 +227,24 @@ def main():
 
 		# Resize Image based on dice amount
 		dice = 5000
-		resized_image = resize(gray, dice)
+		saturation_thresholds = {
+		  "one_dice_sat": 15,
+   	      "two_dice_sat": 55,
+   	      "three_dice_sat": 85,
+   	      "four_dice_sat": 100,
+   	      "five_dice_sat": 115
+		}
 
 		# Convert to dice and save
-		new = convert_dice(resized_image)
+
+		# border_color = (255, 255, 102)
+		resized_image = resize(gray, dice)
+		new = convert_dice(resized_image, saturation_thresholds)
 		new.save(path + 'dice' + suffix)
+
+		resized_image = resize(gray, dice, True)
+		new = convert_dice_with_border(resized_image, saturation_thresholds)
+		new.save(path + 'dice_with_' + suffix)
 
 if __name__ == "__main__":
 	main()
