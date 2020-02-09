@@ -30,6 +30,28 @@ def convert_grayscale(image):
 	# Return new image
 	return new
 
+# Resize Image
+def resize(image, dice = 1000):
+	# Get size
+	width, height = image.size
+
+	# Given a dice count
+	# Calculates the amount of dice to use for the width and height
+	width_ratio = width/(width + height + 0.0)
+	height_ratio = 1 - width_ratio
+	new_width = ((4*height_ratio*width_ratio*dice)**(1/2.0))/(2.0*height_ratio)
+	new_height = dice/(new_width + 0.0)
+
+	#round to the nearest dice
+	new_width = int(round(new_width))
+	new_height = int(round(new_height))
+
+	print('width_dice_amount:{0}'.format(new_width))
+	print('height_dice_amount:{0}'.format(new_height))
+	print('width_dice_amount*height_dice_amount:{0}'.format(new_width*new_height))
+
+	return image.resize((new_width*7, new_height*7))
+
 def get_pixel(image, i, j):
  	# Inside image bounds?
  	width, height = image.size
@@ -65,12 +87,12 @@ def convert_dice(image):
 	  #  for l in range(7):
 	  #   pixels[i+l, j+k] = (0,0,0)
 	  # draw die
-	  if saturation < 10:
+	  if saturation < 15:
 	    pixels[i+3, j+3] = (255,255,255)
-	  elif saturation < 30:
+	  elif saturation < 55:
 	   pixels[i+1, j+2] = (255,255,255)
 	   pixels[i+5, j+4] = (255,255,255)
-	  elif saturation < 65:
+	  elif saturation < 85:
 	   pixels[i+1, j+1] = (255,255,255)
 	   pixels[i+3, j+3] = (255,255,255)
 	   pixels[i+5, j+5] = (255,255,255)
@@ -79,7 +101,7 @@ def convert_dice(image):
 	   pixels[i+2, j+4] = (255,255,255)
 	   pixels[i+4, j+2] = (255,255,255)
 	   pixels[i+4, j+4] = (255,255,255)
-	  elif saturation < 200:
+	  elif saturation < 115:
 	   pixels[i+1, j+1] = (255,255,255)
 	   pixels[i+5, j+1] = (255,255,255)
 	   pixels[i+3, j+3] = (255,255,255)
@@ -120,17 +142,13 @@ def main():
 
 		# Load gray image
 		gray = Image.open('/Users/dvcv/Documents/code/2dice/djs.pnggray.png')
-		width, height = gray.size
-		dice_amount = 1000
-		width_dice_amount = 97
-		height_dice_amount = 104
-		print('width_dice_amount:{0}'.format(width_dice_amount))
-		print('height_dice_amount:{0}'.format(height_dice_amount))
-		new_image = gray.resize((width_dice_amount*7, height_dice_amount*7))
-		new_image.save
+
+		# Resize Image based on dice amount
+		dice = 5000
+		resized_image = resize(gray, dice)
 
 		# Convert to dice and save
-		new = convert_dice(new_image)
+		new = convert_dice(resized_image)
 		new.save(path + 'dice' + suffix)
 
 if __name__ == "__main__":
