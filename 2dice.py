@@ -52,16 +52,6 @@ def resize(image, dice = 1000):
 
 	return image.resize((new_width, new_height))
 
-def get_pixel(image, i, j):
- 	# Inside image bounds?
- 	width, height = image.size
- 	if i >= width or j >= height:
- 		return None
-
-  	# Get Pixel
- 	pixel = image.getpixel((i, j))
- 	return pixel
-
 # Create a Primary Colors version of the image
 def convert_dice_with_border(image, saturation_thresholds, border_color = (255, 255, 102)):
 	# Get size
@@ -75,14 +65,12 @@ def convert_dice_with_border(image, saturation_thresholds, border_color = (255, 
 	i = 0
 	j = 0
 	maxSaturation = 0
-	count = 0
 
 	while i < height:
 		while j < width:
-			pixel = image.getpixel((i,j))
+			pixel = image.getpixel((i, j))
 			if pixel[2] > maxSaturation:
 				maxSaturation = pixel[2]
-			count += 1
 			j+=1
 		i+=1
 
@@ -92,7 +80,7 @@ def convert_dice_with_border(image, saturation_thresholds, border_color = (255, 
 	while j < height:
 	 while i < width:
 	  # Get saturation
-	  pixel = get_pixel(image, i, j)
+	  pixel = image.getpixel((i, j))
 	  saturation = pixel[2]
 	  # Set Border Color
 	  for k in range(9):
