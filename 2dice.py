@@ -131,27 +131,41 @@ def convert_dice_with_border(image, saturation_thresholds, border_color = (255, 
 	return new
 
 def main():
-	# process input
-	path = "/Users/dvcv/Documents/code/2dice/dice-image.png"
+	# Entere file path here.
+	input_path = '/Users/dvcv/Documents/code/2dice/dice-image.png'
+	if "/" in input_path:
+		delimiter = "/"
+	elif "\\" in input_path:
+		delimiter = "\\"
+
+	input_path = input_path.split(delimiter)
+	file = input_path[-1]
+	path = ""
+
+	if len(input_path) != 1:
+		path = delimiter
+
+	for i in range(len(input_path)-1):
+		path += input_path[i] + delimiter
 
 	try:
 		# Load Image (JPEG/JPG needs libjpeg to load)
-		original = Image.open(path)
+		original = Image.open(path + file)
 
-	except FileNotFoundError:
-		print(path)
+	except EnvironmentError as e:
+		print(path + file)
 		print("File not found. Please make sure your path and file name are correct and try again.")
 
 	else:
-		suffix = "." + 'png'
+		suffix = "." + file.split(".")[-1]
 		# Resize image to the amount of dice being used
-		dice = 1000
+		dice = input("Please enter a number: ")
 		resized_image = resize(original, dice)
 		# Convert to Grayscale and save
 		new = convert_grayscale(resized_image)
 		new.save(path + 'gray' + suffix)
 		# Load gray image
-		gray = Image.open('/Users/dvcv/Documents/code/2dice/dice-image.pnggray.png')
+		gray = Image.open(path + 'gray' + suffix)
 		# Saturation Levels
 		saturation_thresholds = {
 		  "one_dice_sat": 1/6.0,
