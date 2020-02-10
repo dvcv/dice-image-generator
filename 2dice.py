@@ -178,10 +178,10 @@ def main():
 		gray = Image.open(path + 'gray' + suffix)
 		# Saturation Levels
 		saturation_thresholds = {
-		  "one_dice_sat": 1.2/6.0,
-   	      "two_dice_sat": 2.2/6.0,
-   	      "three_dice_sat": 3.2/6.0,
-   	      "four_dice_sat": 4.6/6.0,
+		  "one_dice_sat": 1/6.0,
+   	      "two_dice_sat": 2/6.0,
+   	      "three_dice_sat": 3/6.0,
+   	      "four_dice_sat": 4/6.0,
    	      "five_dice_sat": 6/6.0
 		}
 		# Convert to dice and save
