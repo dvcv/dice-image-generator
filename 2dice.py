@@ -46,8 +46,8 @@ def resize(image, dice = 1000):
 	new_width = int(round(new_width))
 	new_height = int(round(new_height))
 
-	print('Width dice amount:{0}'.format(new_width))
-	print('Height dice amount:{0}'.format(new_height))
+	print('The number of dice to use for the width:{0}'.format(new_width))
+	print('The number of dice to use for the height:{0}'.format(new_height))
 	print('Total:{0}'.format(new_width*new_height))
 
 	adjust = 9
@@ -159,7 +159,7 @@ def main():
 	else:
 		suffix = "." + file.split(".")[-1]
 		# Resize image to the amount of dice being used
-		dice = input("Please enter a number: ")
+		dice = input("Please enter the amount of dice you would like to use: ")
 		resized_image = resize(original, dice)
 		# Convert to Grayscale and save
 		new = convert_grayscale(resized_image)
