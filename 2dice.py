@@ -66,13 +66,13 @@ def convert_dice_with_border(image, saturation_thresholds, border_color = (255, 
 	j = 0
 	maxSaturation = 0
 
-	while i < height:
-		while j < width:
+	while j < height:
+		while i < width:
 			pixel = image.getpixel((i, j))
 			if pixel[2] > maxSaturation:
 				maxSaturation = pixel[2]
-			j+=1
-		i+=1
+			i+=1
+		j+=1
 
 	# Transform to dice
  	i = 0
