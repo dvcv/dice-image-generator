@@ -13,13 +13,13 @@ scipy
 ## Settings
 Change these setting in the 2dice_color.py file to your liking.  
 ### Saturation Levels
-This decides when to use a single dot side of a dice vs two, three, ect.
-saturation_thresholds = {
-  "lvl_one": 1/6.0,
-      "lvl_two": 2/6.0,
-      "lvl_three": 3/6.0,
-      "lvl_four": 4/6.0,
-      "lvl_five": 5/6.0
+This decides when to use a single dot side of a dice vs two, three, ect.  
+saturation_thresholds = {  
+  "lvl_one": 1/6.0,  
+      "lvl_two": 2/6.0,  
+      "lvl_three": 3/6.0,  
+      "lvl_four": 4/6.0,  
+      "lvl_five": 5/6.0  
 }  
 ### Dice colors. Enter as many dice colors as you want in RGB format.  
 dice_colors = [(255,255,255)]  
