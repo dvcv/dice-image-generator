@@ -146,13 +146,14 @@ def main():
 	elif "\\" in cwd:
 		delimiter = "\\"
 	image_path = cwd + delimiter + 'original_image'
-
+	input_path = ''
 	for file in os.listdir(image_path):
 	 if file.endswith(".png"):
 	  input_path = os.path.join(image_path, file)
 	  break
-	 else:
-	  print('No Image found with .png extension')
+	if input_path == '':
+	 print('No Image found with .png extension in original_image directory')
+	 return
 
 	# Load Image (JPEG/JPG needs libjpeg to load)
 	print(input_path.strip())
