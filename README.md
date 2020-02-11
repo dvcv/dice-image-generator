@@ -29,4 +29,4 @@ border_color = (255,255,255)
 ## Description
 Convert a png image into one made of dice. Script auto adjust the image to the number of dice entered.
 ## Examples
-<image style='width: 30%' src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/multi-color-dice.png'/>
+<image style='width: 100px' src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/multi-color-dice.png'/>
