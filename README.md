@@ -1,4 +1,4 @@
-<image width="500" src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/multi-color-dice.png'/>
+<image width="100" src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/multi-color-dice.png'/>
 # Requirements
 Python 2.7  
 
