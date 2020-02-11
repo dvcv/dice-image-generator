@@ -13,9 +13,9 @@ def set_settings():
 	      "lvl_five": 5/6.0
 	}
 	#Dice colors. Enter as many dice colors as you want in RGB format.
-	dice_colors = [(255,44,0)]
+	dice_colors = [(255,255,255)]
 	#Border color. Adds a border around the dice.
-	border_color = ((255,0,0,0))
+	border_color = ((0,0,0))
 	return {'saturation_thresholds': saturation_thresholds, 'dice_colors': dice_colors, 'border_color': border_color}
 
 # Resize Image
