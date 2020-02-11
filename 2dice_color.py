@@ -2,6 +2,22 @@ from PIL import Image
 import scipy.spatial as sp
 import os
 
+# Settings
+def set_settings():
+	# Saturation Levels
+	saturation_thresholds = {
+	  "lvl_one": 1/6.0,
+	      "lvl_two": 2/6.0,
+	      "lvl_three": 3/6.0,
+	      "lvl_four": 4/6.0,
+	      "lvl_five": 5/6.0
+	}
+	#Dice colors. Enter as many dice colors as you want in RGB format.
+	dice_colors = [(255,44,0)]
+	#Border color. Adds a border around the dice.
+	border_color = ((255,0,0,0))
+	return {'saturation_thresholds': saturation_thresholds, 'dice_colors': dice_colors, 'border_color': border_color}
+
 # Resize Image
 def resize(image, dice = 1000):
 	# Get size
@@ -164,19 +180,14 @@ def main():
 	dice = input("Please enter the amount of dice you would like to use: ")
 	#Resize Image
 	resized_image = resize(original, dice)
-	## SETTINGS ####################
+	# SETTINGS
+	settings = set_settings()
 	# Saturation Levels
-	saturation_thresholds = {
-	  "lvl_one": 1/6.0,
-	      "lvl_two": 2/6.0,
-	      "lvl_three": 3/6.0,
-	      "lvl_four": 4/6.0,
-	      "lvl_five": 5/6.0
-	}
+	saturation_thresholds = settings['saturation_thresholds']
 	#Dice colors. Enter as many dice colors as you want in RGB format.
-	dice_colors = [(255,44,0)]
+	dice_colors = settings['dice_colors']
 	#Border color. Adds a border around the dice.
-	border_color = ((255,0,0,0))
+	border_color = settings['border_color']
 	################################
 	# Convert to dice and save
 	new = convert_dice_with_border(resized_image, saturation_thresholds, border_color, dice_colors)

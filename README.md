@@ -11,7 +11,7 @@ Run by typing `python 2dice_color.py`
 Type in the amount of dice you would like to use.
 
 ## Settings
-Change these setting in the 2dice_color.py file to your liking.
+Change these setting in set_settings() method in 2dice_color.py file to your liking.
 ### Saturation Levels
 saturation_thresholds = {
   "lvl_one": 1/6.0,
