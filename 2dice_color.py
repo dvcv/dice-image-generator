@@ -12,10 +12,10 @@ def set_settings():
 	      "lvl_four": 4/6.0,
 	      "lvl_five": 5/6.0
 	}
-	#Dice colors. Enter as many dice colors as you want in RGB format.
+	#Dice colors. Enter as many dice colors as you want in RGB format and in an array.
 	dice_colors = [(255,255,255)]
-	#Border color. Adds a border around the dice.
-	border_color = ((0,0,0))
+	#Border color. Adds a border around the dice. Use an empty string '' to hide border. Otherwise type use something like (0,0,0).
+	border_color = ''
 	return {'saturation_thresholds': saturation_thresholds, 'dice_colors': dice_colors, 'border_color': border_color}
 
 # Resize Image
@@ -41,12 +41,18 @@ def resize(image, dice = 1000):
 	return image.resize((new_width, new_height))
 
 # Create a Primary Colors version of the image
-def convert_dice_with_border(image, saturation_thresholds, border_color = (255, 255, 102), main_colors = [(255,255,255)]):
+def convert_dice_with_border(image, saturation_thresholds, border_color, main_colors = [(255,255,255)]):
+	if border_color != '':
+	 adjust = 9
+	 border = True
+	else:
+	 adjust = 7
+	 border = False
 	# Get size
 	width, height = image.size
 
 	# Create new Image and a Pixel Map
-	new = Image.new("RGB", (width*9, height*9), "black")
+	new = Image.new("RGB", (width*adjust, height*adjust), "black")
 	pixels = new.load()
 
 	# Max Saturation
@@ -76,14 +82,15 @@ def convert_dice_with_border(image, saturation_thresholds, border_color = (255, 
 	  ditsance, result = tree.query(input_color)
 	  nearest_color = main_colors[result]
 	  # Color Background of dice with nearest coolor
-	  for k in range(9):
-	   for l in range(9):
-	    pixels[(i*9)+k,(j*9)+l] = nearest_color
+	  for k in range(adjust):
+	   for l in range(adjust):
+	    pixels[(i*adjust)+k,(j*adjust)+l] = nearest_color
 	  # Set Border Color
-	  for k in range(9):
-	   for l in range(9):
-		if ((i*9)+k)%9 ==0 or ((j*9)+l)%9 ==0 or ((i*9)+k)%9 ==8 or ((j*9)+l)%9 ==8:
-		 pixels[(i*9)+k,(j*9)+l] = border_color
+	  if border:
+	   for k in range(adjust):
+	    for l in range(adjust):
+		 if ((i*adjust)+k)%adjust ==0 or ((j*adjust)+l)%adjust ==0 or ((i*adjust)+k)%adjust ==8 or ((j*adjust)+l)%adjust ==8:
+		  pixels[(i*adjust)+k,(j*adjust)+l] = border_color
 
 	  #Use saturation thresholds to determine what dice to use
 	  lvl_one = saturation_thresholds['lvl_one']
@@ -94,60 +101,60 @@ def convert_dice_with_border(image, saturation_thresholds, border_color = (255, 
 	  #If color is not white use white dots else use black
 	  if nearest_color != (255,255,255):
 		if saturation < maxSaturation*lvl_one:
-		   pixels[(i*9)+4, (j*9)+4] = (255,255,255)
+		   pixels[(i*adjust)+4, (j*adjust)+4] = (255,255,255)
 		elif saturation < maxSaturation*lvl_two:
-		   pixels[(i*9)+2, (j*9)+3] = (255,255,255)
-		   pixels[(i*9)+6, (j*9)+5] = (255,255,255)
+		   pixels[(i*adjust)+2, (j*adjust)+3] = (255,255,255)
+		   pixels[(i*adjust)+6, (j*adjust)+5] = (255,255,255)
 		elif saturation < maxSaturation*lvl_three:
-		   pixels[(i*9)+2, (j*9)+2] = (255,255,255)
-		   pixels[(i*9)+4, (j*9)+4] = (255,255,255)
-		   pixels[(i*9)+6, (j*9)+6] = (255,255,255)
+		   pixels[(i*adjust)+2, (j*adjust)+2] = (255,255,255)
+		   pixels[(i*adjust)+4, (j*adjust)+4] = (255,255,255)
+		   pixels[(i*adjust)+6, (j*adjust)+6] = (255,255,255)
 		elif saturation < maxSaturation*lvl_four:
-		   pixels[(i*9)+3, (j*9)+3] = (255,255,255)
-		   pixels[(i*9)+3, (j*9)+5] = (255,255,255)
-		   pixels[(i*9)+5, (j*9)+3] = (255,255,255)
-		   pixels[(i*9)+5, (j*9)+5] = (255,255,255)
+		   pixels[(i*adjust)+3, (j*adjust)+3] = (255,255,255)
+		   pixels[(i*adjust)+3, (j*adjust)+5] = (255,255,255)
+		   pixels[(i*adjust)+5, (j*adjust)+3] = (255,255,255)
+		   pixels[(i*adjust)+5, (j*adjust)+5] = (255,255,255)
 		elif saturation <= maxSaturation*lvl_five:
-		   pixels[(i*9)+2, (j*9)+2] = (255,255,255)
-		   pixels[(i*9)+6, (j*9)+2] = (255,255,255)
-		   pixels[(i*9)+4, (j*9)+4] = (255,255,255)
-		   pixels[(i*9)+2, (j*9)+6] = (255,255,255)
-		   pixels[(i*9)+6, (j*9)+6] = (255,255,255)
+		   pixels[(i*adjust)+2, (j*adjust)+2] = (255,255,255)
+		   pixels[(i*adjust)+6, (j*adjust)+2] = (255,255,255)
+		   pixels[(i*adjust)+4, (j*adjust)+4] = (255,255,255)
+		   pixels[(i*adjust)+2, (j*adjust)+6] = (255,255,255)
+		   pixels[(i*adjust)+6, (j*adjust)+6] = (255,255,255)
 		else:
-		   pixels[(i*9)+3, (j*9)+2] = (255,255,255)
-		   pixels[(i*9)+5, (j*9)+2] = (255,255,255)
-		   pixels[(i*9)+3, (j*9)+4] = (255,255,255)
-		   pixels[(i*9)+5, (j*9)+4] = (255,255,255)
-		   pixels[(i*9)+3, (j*9)+6] = (255,255,255)
-		   pixels[(i*9)+5, (j*9)+6] = (255,255,255)
+		   pixels[(i*adjust)+3, (j*adjust)+2] = (255,255,255)
+		   pixels[(i*adjust)+5, (j*adjust)+2] = (255,255,255)
+		   pixels[(i*adjust)+3, (j*adjust)+4] = (255,255,255)
+		   pixels[(i*adjust)+5, (j*adjust)+4] = (255,255,255)
+		   pixels[(i*adjust)+3, (j*adjust)+6] = (255,255,255)
+		   pixels[(i*adjust)+5, (j*adjust)+6] = (255,255,255)
 	  else:
 		if saturation < maxSaturation*lvl_one:
-		   pixels[(i*9)+3, (j*9)+2] = (0,0,0)
-		   pixels[(i*9)+5, (j*9)+2] = (0,0,0)
-		   pixels[(i*9)+3, (j*9)+4] = (0,0,0)
-		   pixels[(i*9)+5, (j*9)+4] = (0,0,0)
-		   pixels[(i*9)+3, (j*9)+6] = (0,0,0)
-		   pixels[(i*9)+5, (j*9)+6] = (0,0,0)
+		   pixels[(i*adjust)+3, (j*adjust)+2] = (0,0,0)
+		   pixels[(i*adjust)+5, (j*adjust)+2] = (0,0,0)
+		   pixels[(i*adjust)+3, (j*adjust)+4] = (0,0,0)
+		   pixels[(i*adjust)+5, (j*adjust)+4] = (0,0,0)
+		   pixels[(i*adjust)+3, (j*adjust)+6] = (0,0,0)
+		   pixels[(i*adjust)+5, (j*adjust)+6] = (0,0,0)
 		elif saturation < maxSaturation*lvl_two:
-		   pixels[(i*9)+2, (j*9)+2] = (0,0,0)
-		   pixels[(i*9)+6, (j*9)+2] = (0,0,0)
-		   pixels[(i*9)+4, (j*9)+4] = (0,0,0)
-		   pixels[(i*9)+2, (j*9)+6] = (0,0,0)
-		   pixels[(i*9)+6, (j*9)+6] = (0,0,0)
+		   pixels[(i*adjust)+2, (j*adjust)+2] = (0,0,0)
+		   pixels[(i*adjust)+6, (j*adjust)+2] = (0,0,0)
+		   pixels[(i*adjust)+4, (j*adjust)+4] = (0,0,0)
+		   pixels[(i*adjust)+2, (j*adjust)+6] = (0,0,0)
+		   pixels[(i*adjust)+6, (j*adjust)+6] = (0,0,0)
 		elif saturation < maxSaturation*lvl_three:
-		   pixels[(i*9)+3, (j*9)+3] = (0,0,0)
-		   pixels[(i*9)+3, (j*9)+5] = (0,0,0)
-		   pixels[(i*9)+5, (j*9)+3] = (0,0,0)
-		   pixels[(i*9)+5, (j*9)+5] = (0,0,0)
+		   pixels[(i*adjust)+3, (j*adjust)+3] = (0,0,0)
+		   pixels[(i*adjust)+3, (j*adjust)+5] = (0,0,0)
+		   pixels[(i*adjust)+5, (j*adjust)+3] = (0,0,0)
+		   pixels[(i*adjust)+5, (j*adjust)+5] = (0,0,0)
 		elif saturation < maxSaturation*lvl_four:
-		   pixels[(i*9)+2, (j*9)+2] = (0,0,0)
-		   pixels[(i*9)+4, (j*9)+4] = (0,0,0)
-		   pixels[(i*9)+6, (j*9)+6] = (0,0,0)
+		   pixels[(i*adjust)+2, (j*adjust)+2] = (0,0,0)
+		   pixels[(i*adjust)+4, (j*adjust)+4] = (0,0,0)
+		   pixels[(i*adjust)+6, (j*adjust)+6] = (0,0,0)
 		elif saturation <= maxSaturation*lvl_five:
-		   pixels[(i*9)+2, (j*9)+3] = (0,0,0)
-		   pixels[(i*9)+6, (j*9)+5] = (0,0,0)
+		   pixels[(i*adjust)+2, (j*adjust)+3] = (0,0,0)
+		   pixels[(i*adjust)+6, (j*adjust)+5] = (0,0,0)
 		else:
-		   pixels[(i*9)+4, (j*9)+4] = (0,0,0)
+		   pixels[(i*adjust)+4, (j*adjust)+4] = (0,0,0)
 	  i+=1
 	 i=0
 	 j+=1
