@@ -1,3 +1,4 @@
 dice_image/
 original_image/*.png
+*.DS_Store
 .DS_Store
