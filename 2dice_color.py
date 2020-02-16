@@ -9,11 +9,11 @@ def set_settings():
 	  "lvl_one": 1/6.0,
 	      "lvl_two": 2/6.0,
 	      "lvl_three": 3/6.0,
-	      "lvl_four": 4/6.0,
-	      "lvl_five": 5/6.0
+	      "lvl_four": 4.4/6.0,
+	      "lvl_five": 6/6.0
 	}
 	#Dice colors. Enter as many dice colors as you want in RGB format and in an array.
-	dice_colors = [(255,255,255)]
+	dice_colors = [(0,0,0)]
 	#Border color. Adds a border around the dice. Use an empty string '' to hide border. Otherwise type use something like (0,0,0).
 	border_color = ''
 	return {'saturation_thresholds': saturation_thresholds, 'dice_colors': dice_colors, 'border_color': border_color}
@@ -65,9 +65,10 @@ def convert_dice_with_border(image, saturation_thresholds, border_color, main_co
 	while j < height:
 		while i < width:
 			pixel = image.getpixel((i, j))
-			if pixel[2] > maxSaturation:
-				maxSaturation = pixel[2]
+			if  (pixel[0]) + (pixel[1]) + (pixel[2]) > maxSaturation:
+				maxSaturation = (pixel[0]) + (pixel[1]) + (pixel[2])
 			i+=1
+		i=0
 		j+=1
 
 	# Transform to dice
@@ -77,7 +78,7 @@ def convert_dice_with_border(image, saturation_thresholds, border_color, main_co
 	 while i < width:
 	  # Get saturation
 	  pixel = image.getpixel((i, j))
-	  saturation = pixel[2]
+	  saturation = (pixel[0]) + (pixel[1]) + (pixel[2])
 	  # Calculate nearest coolor
 	  input_color = (pixel[0],pixel[1],pixel[2])
 	  tree = sp.KDTree(main_colors)
@@ -123,6 +124,9 @@ def convert_dice_with_border(image, saturation_thresholds, border_color, main_co
 		   pixels[(i*square_width+adjust)+2, (j*square_width+adjust)+6] = (255,255,255)
 		   pixels[(i*square_width+adjust)+6, (j*square_width+adjust)+6] = (255,255,255)
 		else:
+		   print('saturation')
+		   print(saturation)
+		   print(maxSaturation)
 		   pixels[(i*square_width+adjust)+3, (j*square_width+adjust)+2] = (255,255,255)
 		   pixels[(i*square_width+adjust)+5, (j*square_width+adjust)+2] = (255,255,255)
 		   pixels[(i*square_width+adjust)+3, (j*square_width+adjust)+4] = (255,255,255)
