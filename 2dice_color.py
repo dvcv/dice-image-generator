@@ -65,8 +65,8 @@ def convert_dice_with_border(image, saturation_thresholds, border_color, main_co
 	while j < height:
 		while i < width:
 			pixel = image.getpixel((i, j))
-			if  (pixel[0]) + (pixel[1]) + (pixel[2]) > maxSaturation:
-				maxSaturation = (pixel[0]) + (pixel[1]) + (pixel[2])
+			if  (pixel[0]*0.2126) + (pixel[1]*0.7152) + (pixel[2]*0.0722) > maxSaturation:
+				maxSaturation = (pixel[0]*0.2126) + (pixel[1]*0.7152) + (pixel[2]*0.0722)
 			i+=1
 		i=0
 		j+=1
@@ -78,7 +78,7 @@ def convert_dice_with_border(image, saturation_thresholds, border_color, main_co
 	 while i < width:
 	  # Get saturation
 	  pixel = image.getpixel((i, j))
-	  saturation = (pixel[0]) + (pixel[1]) + (pixel[2])
+	  saturation = (pixel[0]*0.2126) + (pixel[1]*0.7152) + (pixel[2]*0.0722)
 	  # Calculate nearest coolor
 	  input_color = (pixel[0],pixel[1],pixel[2])
 	  tree = sp.KDTree(main_colors)
@@ -207,6 +207,9 @@ def main():
 	path = cwd + delimiter + 'dice_image' + delimiter
 	if not os.path.exists(path):
 	 os.makedirs(path)
+	width, height = new.size
+	#makes image 4 times larger
+	new = new.resize((width*2, height*2))
 	new.save(path + 'dice' + suffix)
 	new.show()
 if __name__ == "__main__":
