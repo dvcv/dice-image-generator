@@ -1,4 +1,4 @@
-<image width="200" src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/multi-color-dice.png'/>  
+<image width="200" src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/dice.png'/>  
 
 # Requirements  
 Python 2.7  
@@ -31,9 +31,10 @@ border_color = (255,255,255)
 ## Description
 Convert a png image into one made of dice. Script auto adjust the image to the number of dice entered.
 ## Example
+<image width="500" src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/original2.png'/>
+<image width="500" src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/dice.png'/>  
 <image width="500" src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/original.png'/>
 <image width="500" src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/multi-color-dice.png'/>  
 <image width="500" src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/white-dice-zoom-1.png'/>
 <image width="500" src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/white-dice-zoom-2.png'/>
 <image width="500" src='https://raw.githubusercontent.com/dvcv/dice-image-generator/master/examples/white-dice-zoom-3.png'/>
-
